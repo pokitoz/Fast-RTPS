@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <profiles>
+
     <participant profile_name="test_participant_profile" is_default_profile="true">
         <rtps>
             <builtin>
@@ -29,8 +30,8 @@
         </topic>
         <qos>
             <latencyBudget>
-                <duration> 
-                      <sec>10</sec>
+                <duration>
+                    <sec>10</sec>
                 </duration>
             </latencyBudget>
             <reliability>
@@ -92,4 +93,5 @@
         </qos>
         <historyMemoryPolicy>PREALLOCATED</historyMemoryPolicy>
     </subscriber>
+
 </profiles>
