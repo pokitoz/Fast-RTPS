@@ -27,6 +27,17 @@
 #include <fastdds/rtps/attributes/RTPSParticipantAttributes.h>
 
 namespace eprosima {
+
+namespace fastdds {
+namespace dds {
+namespace builtin {
+
+class TypeLookupManager;
+
+} // namespace builtin
+} // namespace dds
+} // namespace fastdds
+
 namespace fastrtps{
 
 class TopicAttributes;
@@ -192,6 +203,12 @@ public:
      */
     bool get_new_entity_id(
             EntityId_t& entityId);
+
+    /**
+     * @brief Retrieves the built-in typelookup service manager.
+     * @return
+     */
+    fastdds::dds::builtin::TypeLookupManager* typelookup_manager() const;
 
 private:
 

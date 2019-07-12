@@ -57,6 +57,11 @@ class SubscriberQos;
 class SubscriberImpl;
 class SubscriberListener;
 
+namespace builtin {
+class TypeLookup_getTypeDependencies_In;
+class TypeLookup_getTypes_In;
+} // namespace builtin
+
 /**
  * Class DomainParticipant used to group Publishers and Subscribers into a single working unit.
  * @ingroup FASTDDS_MODULE
@@ -370,6 +375,27 @@ public:
     const fastrtps::rtps::RTPSParticipant* rtps_participant() const;
 
     fastrtps::rtps::RTPSParticipant* rtps_participant();
+
+    /**
+     * When a DomainParticipant receives an incomplete list of TypeIdentifiers in a
+     * PublicationBuiltinTopicData or SubscriptionBuiltinTopicData, it may request the additional type
+     * dependencies by invoking the getTypeDependencies operation.
+     * @param in
+     * @param out
+     * @return
+     */
+    bool get_type_dependencies(
+            const builtin::TypeLookup_getTypeDependencies_In& in) const;
+
+    /**
+     * A DomainParticipant may invoke the operation getTypes to retrieve the TypeObjects associated with a
+     * list of TypeIdentifiers.
+     * @param in
+     * @param out
+     * @return
+     */
+    bool get_types(
+            const builtin::TypeLookup_getTypes_In& in) const;
 
 private:
 
