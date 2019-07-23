@@ -22,7 +22,10 @@
 #ifndef DOXYGEN_SHOULD_SKIP_THIS_PUBLIC
 
 #include <fastrtps/qos/DeadlineMissedStatus.h>
+#include <fastrtps/qos/LivelinessChangedStatus.h>
 #include <fastdds/rtps/common/Time_t.h>
+#include <fastdds/rtps/common/Guid.h>
+#include <fastdds/rtps/common/InstanceHandle.h>
 
 #include <vector>
 #include <cstdint>
@@ -32,14 +35,11 @@ namespace fastrtps {
 
 class TopicAttributes;
 class ReaderQos;
-class LivelinessChangedStatus;
 
 namespace rtps
 {
 class RTPSReader;
 class ReaderAttributes;
-class GUID_t;
-class InstanceHandle_t;
 }
 
 class SampleInfo_t;

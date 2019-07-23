@@ -20,14 +20,16 @@
 #define _FASTRTPS_DATAWRITER_HPP_
 
 #include <fastdds/rtps/common/Time_t.h>
+#include <fastdds/rtps/common/Guid.h>
+#include <fastdds/rtps/common/InstanceHandle.h>
 #include <fastrtps/qos/DeadlineMissedStatus.h>
 #include <fastrtps/qos/IncompatibleQosStatus.hpp>
+#include <fastrtps/qos/LivelinessLostStatus.h>
 
 namespace eprosima {
 namespace fastrtps{
 
 class WriterQos;
-class LivelinessLostStatus;
 class TopicAttributes;
 
 namespace rtps
@@ -36,8 +38,6 @@ class RTPSWriter;
 class RTPSParticipant;
 class WriteParams;
 class WriterAttributes;
-class InstanceHandle_t;
-class GUID_t;
 }
 
 } // namespace fastrtps
