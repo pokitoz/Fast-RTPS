@@ -145,7 +145,7 @@ void DataWriter::get_offered_deadline_missed_status(
 }
 
 bool DataWriter::get_liveliness_lost_status(
-        fastrtps::LivelinessLostStatus& status)
+        LivelinessLostStatus& status)
 {
     return impl_->get_liveliness_lost_status(status);
 }
