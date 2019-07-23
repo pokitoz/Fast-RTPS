@@ -37,7 +37,8 @@ namespace rtps
 class RTPSWriter;
 class RTPSParticipant;
 class WriteParams;
-class WriterAttributes;}
+class WriterAttributes;
+}
 
 } // namespace fastrtps
 
