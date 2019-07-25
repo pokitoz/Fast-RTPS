@@ -25,10 +25,8 @@
 #include <dds/core/Exception.hpp> //InvalidDowncastError
 
 
-namespace dds
-{
-namespace core
-{
+namespace dds {
+namespace core {
 
 template <typename T1, typename T2>
 struct is_base_of : public ::std::is_base_of<T1, T2> { };
@@ -55,7 +53,7 @@ TO polymorphic_cast(FROM& from) {
     return to;
 }
 
-}
-}
+} //namespace core
+} //namespace dds
 
 #endif // EPROSIMA_DDS_CORE_DETAIL_REF_TRAITS_HPP_

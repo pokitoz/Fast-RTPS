@@ -27,10 +27,8 @@
 #include <dds/core/macros.hpp>
 #include <dds/core/detail/conformance.hpp>
 
-namespace dds
-{
-namespace core
-{
+namespace dds {
+namespace core {
 
 /**
  * Use a std::vector<uint8_t> to hold a sequence of bytes.
@@ -61,7 +59,7 @@ class OMG_DDS_API null_type { };
  */
 extern const null_type OMG_DDS_API null;
 
-}
-}
+} //namespace core
+} //namespace dds
 
 #endif // OMG_DDS_CORE_TYPES_HPP_

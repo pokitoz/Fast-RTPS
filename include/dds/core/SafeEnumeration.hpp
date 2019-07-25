@@ -20,10 +20,8 @@
 #ifndef OMG_DDS_CORE_SAFEENUMERATION_HPP_
 #define OMG_DDS_CORE_SAFEENUMERATION_HPP_
 
-namespace dds
-{
-namespace core
-{
+namespace dds {
+namespace core {
 
 /**
  * safe_enum provides a wrapper for enumerated types in a typesafe
@@ -51,8 +49,8 @@ public:
 };
 
 
-}
-}
+} //namespace core
+} //namespace dds
 
 
 

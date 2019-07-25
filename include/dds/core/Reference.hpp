@@ -23,11 +23,8 @@
 #include <dds/core/types.hpp>
 #include <dds/core/refmacros.hpp>
 
-namespace dds
-{
-namespace core
-{
-
+namespace dds {
+namespace core {
 
 /**
  * @brief
@@ -302,8 +299,8 @@ protected:
 };
 
 
-}
-}
+} //namespace core
+} //namespace dds
 
 
 /**

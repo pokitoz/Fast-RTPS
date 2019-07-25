@@ -29,10 +29,8 @@
 #   pragma warning (disable:4275) // non dll-interface class 'std::foo_error' used as base for dll-interface class 'dds::core::BarError'
 #endif
 
-namespace dds
-{
-namespace core
-{
+namespace dds {
+namespace core {
 
 /**
  * @brief
@@ -362,8 +360,8 @@ public:
 /** @endcond */
 };
 
-}
-}
+} //namespace core
+} //namespace dds
 
 #if defined _MSC_VER
 #   pragma warning (pop)

@@ -20,10 +20,8 @@
 #ifndef OMG_DDS_CORE_REF_TRAITS_H_
 #define OMG_DDS_CORE_REF_TRAITS_H_
 
-namespace  dds
-{
-namespace core
-{
+namespace  dds {
+namespace core {
 
 /** @cond
  * These traits must be provided by compliant implementations
@@ -44,8 +42,8 @@ TO  polymorphic_cast(FROM& from);
 
 /** @endcond */
 
-}
-}
+} //namespace core
+} //namespace dds
 
 
 // This include should stay here as it provides implementations
