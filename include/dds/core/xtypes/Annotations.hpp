@@ -42,18 +42,18 @@ namespace annotation
 {
     // These functions can be used to get cached instances,
     // to avoid the proliferation of small annotation objects.
-    dds::core::xtypes::IdAnnotation Id(uint32_t);
-    dds::core::xtypes::KeyAnnotation Key();
-    dds::core::xtypes::SharedAnnotation Shared();
-    dds::core::xtypes::NestedAnnotation Nested();
-    dds::core::xtypes::ExtensibilityAnnotation Extensibility(dds::core::xtypes::ExtensibilityAnnotation::ExtensibilityKind kind);
-    dds::core::xtypes::ExtensibilityAnnotation Final();
-    dds::core::xtypes::ExtensibilityAnnotation Extensible();
-    dds::core::xtypes::ExtensibilityAnnotation Mutable();
-    dds::core::xtypes::MustUnderstandAnnotation MustUnderstand();
-    dds::core::xtypes::VerbatimAnnotation Verbatim(const std::string& text);
-    dds::core::xtypes::BitsetAnnotation Bitset();
-    dds::core::xtypes::BitsetAnnotation BitBound(uint32_t bound);
+    IdAnnotation d(uint32_t);
+    KeyAnnotation key();
+    SharedAnnotation shared();
+    NestedAnnotation nested();
+    ExtensibilityAnnotation extensibility(ExtensibilityKind kind);
+    ExtensibilityAnnotation get_final();
+    ExtensibilityAnnotation extensible();
+    ExtensibilityAnnotation get_mutable();
+    MustUnderstandAnnotation must_understand();
+    VerbatimAnnotation verbatim(const std::string& text);
+    BitsetAnnotation bitset();
+    BitsetAnnotation bit_bound(uint32_t bound);
 
 } //namespace annotation
 } //namespace xtypes
