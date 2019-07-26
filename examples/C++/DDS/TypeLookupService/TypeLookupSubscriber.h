@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /**
- * @file HelloWorldSubscriber.h
+ * @file TypeLookupSubscriber.h
  *
  */
 
@@ -38,10 +38,10 @@
 
 #include <map>
 
-class HelloWorldSubscriber {
+class TypeLookupSubscriber {
 public:
-    HelloWorldSubscriber();
-    virtual ~HelloWorldSubscriber();
+    TypeLookupSubscriber();
+    virtual ~TypeLookupSubscriber();
     //!Initialize the subscriber
     bool init();
     //!RUN the subscriber
@@ -70,23 +70,24 @@ public:
         , public eprosima::fastdds::dds::DomainParticipantListener
     {
     public:
-        SubListener(HelloWorldSubscriber* sub):n_matched(0),n_samples(0),subscriber_(sub){}
+        SubListener(TypeLookupSubscriber* sub):n_matched(0),n_samples(0),subscriber_(sub){}
         ~SubListener() override {}
         void on_data_available(eprosima::fastdds::dds::DataReader* reader) override;
         void on_subscription_matched(eprosima::fastdds::dds::DataReader* reaer,
                                      eprosima::fastrtps::rtps::MatchingInfo& info) override;
-        void on_type_discovery(
+
+        void on_type_information_received(
                 eprosima::fastdds::dds::DomainParticipant* participant,
-                const eprosima::fastrtps::rtps::SampleIdentity& request_sample_id,
-                const eprosima::fastrtps::string_255& topic,
-                const eprosima::fastrtps::types::TypeIdentifier* identifier,
-                const eprosima::fastrtps::types::TypeObject* object,
-                eprosima::fastrtps::types::DynamicType_ptr dyn_type) override;
+                const eprosima::fastrtps::string_255 topic_name,
+                const eprosima::fastrtps::string_255 type_name,
+                const eprosima::fastrtps::types::TypeInformation& type_information) override;
 
         eprosima::fastrtps::SampleInfo_t m_info;
         int n_matched;
         uint32_t n_samples;
-        HelloWorldSubscriber* subscriber_;
+        TypeLookupSubscriber* subscriber_;
+        std::map<std::string, std::string> topic_type_map_;
+        eprosima::fastrtps::types::TypeInformation type_info_;
     }m_listener;
 
 private:

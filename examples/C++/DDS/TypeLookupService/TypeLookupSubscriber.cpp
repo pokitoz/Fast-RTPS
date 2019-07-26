@@ -13,11 +13,11 @@
 // limitations under the License.
 
 /**
- * @file HelloWorldSubscriber.cpp
+ * @file TypeLookupSubscriber.cpp
  *
  */
 
-#include "HelloWorldSubscriber.h"
+#include "TypeLookupSubscriber.h"
 #include <fastrtps/attributes/ParticipantAttributes.h>
 #include <fastrtps/attributes/SubscriberAttributes.h>
 #include <fastdds/dds/subscriber/Subscriber.hpp>
@@ -25,23 +25,25 @@
 #include <fastrtps/utils/eClock.h>
 
 #include <fastrtps/types/DynamicDataFactory.h>
+#include <fastrtps/types/TypeObjectFactory.h>
 
 using namespace eprosima::fastdds::dds;
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 
-HelloWorldSubscriber::HelloWorldSubscriber():mp_participant(nullptr),
+TypeLookupSubscriber::TypeLookupSubscriber():mp_participant(nullptr),
     mp_subscriber(nullptr), m_listener(this)
 {
 }
 
-bool HelloWorldSubscriber::init()
+bool TypeLookupSubscriber::init()
 {
     ParticipantAttributes PParam;
     PParam.rtps.builtin.discovery_config.discoveryProtocol = SIMPLE;
     PParam.rtps.builtin.discovery_config.use_SIMPLE_EndpointDiscoveryProtocol = true;
     PParam.rtps.builtin.discovery_config.m_simpleEDP.use_PublicationReaderANDSubscriptionWriter = true;
     PParam.rtps.builtin.discovery_config.m_simpleEDP.use_PublicationWriterANDSubscriptionReader = true;
+    PParam.rtps.builtin.typelookup_config.use_client = true;
     PParam.rtps.builtin.domainId = 0;
     PParam.rtps.builtin.discovery_config.leaseDuration = c_TimeInfinite;
     PParam.rtps.setName("Participant_sub");
@@ -53,8 +55,8 @@ bool HelloWorldSubscriber::init()
     qos_.m_durability.kind = TRANSIENT_LOCAL_DURABILITY_QOS;
     qos_.m_reliability.kind = RELIABLE_RELIABILITY_QOS;
     topic_.topicKind = NO_KEY;
-    topic_.topicDataType = "HelloWorld";
-    topic_.topicName = "HelloWorldTopic";
+    topic_.topicDataType = "TypeLookup";
+    topic_.topicName = "TypeLookupTopic";
     topic_.historyQos.kind = KEEP_LAST_HISTORY_QOS;
     topic_.historyQos.depth = 30;
     topic_.resourceLimitsQos.max_samples = 50;
@@ -63,13 +65,13 @@ bool HelloWorldSubscriber::init()
     return true;
 }
 
-HelloWorldSubscriber::~HelloWorldSubscriber() {
+TypeLookupSubscriber::~TypeLookupSubscriber() {
     DomainParticipantFactory::get_instance()->delete_participant(mp_participant);
     readers_.clear();
     datas_.clear();
 }
 
-void HelloWorldSubscriber::SubListener::on_subscription_matched(
+void TypeLookupSubscriber::SubListener::on_subscription_matched(
         eprosima::fastdds::dds::DataReader*,
         eprosima::fastrtps::rtps::MatchingInfo& info)
 {
@@ -85,7 +87,7 @@ void HelloWorldSubscriber::SubListener::on_subscription_matched(
     }
 }
 
-void HelloWorldSubscriber::SubListener::on_data_available(eprosima::fastdds::dds::DataReader* reader)
+void TypeLookupSubscriber::SubListener::on_data_available(eprosima::fastdds::dds::DataReader* reader)
 {
     auto dit = subscriber_->datas_.find(reader);
 
@@ -104,45 +106,72 @@ void HelloWorldSubscriber::SubListener::on_data_available(eprosima::fastdds::dds
     }
 }
 
-void HelloWorldSubscriber::SubListener::on_type_discovery(
-        DomainParticipant*,
-        const rtps::SampleIdentity&,
-        const string_255& topic,
-        const types::TypeIdentifier*,
-        const types::TypeObject*,
-        types::DynamicType_ptr dyn_type)
+void TypeLookupSubscriber::SubListener::on_type_information_received(
+        eprosima::fastdds::dds::DomainParticipant*,
+        const eprosima::fastrtps::string_255 topic_name,
+        const eprosima::fastrtps::string_255 type_name,
+        const eprosima::fastrtps::types::TypeInformation& type_information)
 {
-    TypeSupport m_type(new types::DynamicPubSubType(dyn_type));
-    subscriber_->mp_participant->register_type(m_type);
+    std::function<void(const std::string&)> callback =
+        [this, topic_name](const std::string& name)
+            {
+                std::cout << "Discovered type: " << name << " from topic " << topic_name << std::endl;
 
-    std::cout << "Discovered type: " << m_type->getName() << " from topic " << topic << std::endl;
+                if (subscriber_->mp_subscriber == nullptr)
+                {
+                    SubscriberAttributes Rparam = subscriber_->att_;
+                    Rparam.topic = subscriber_->topic_;
+                    Rparam.topic.topicName = topic_name;
+                    Rparam.qos = subscriber_->qos_;
+                    subscriber_->mp_subscriber = subscriber_->mp_participant->create_subscriber(
+                        SUBSCRIBER_QOS_DEFAULT, Rparam, nullptr);
 
-    if (subscriber_->mp_subscriber == nullptr)
-    {
-        SubscriberAttributes Rparam = subscriber_->att_;
-        Rparam.topic = subscriber_->topic_;
-        Rparam.topic.topicName = topic;
-        Rparam.qos = subscriber_->qos_;
-        subscriber_->mp_subscriber = subscriber_->mp_participant->create_subscriber(
-            SUBSCRIBER_QOS_DEFAULT, Rparam, nullptr);
+                    if (subscriber_->mp_subscriber == nullptr)
+                    {
+                        return;
+                    }
+                }
+                subscriber_->topic_.topicDataType = name;
+                DataReader* reader = subscriber_->mp_subscriber->create_datareader(
+                    subscriber_->topic_,
+                    subscriber_->qos_,
+                    &subscriber_->m_listener);
 
-        if (subscriber_->mp_subscriber == nullptr)
-        {
-            return;
-        }
-    }
-    subscriber_->topic_.topicDataType = m_type->getName();
-    DataReader* reader = subscriber_->mp_subscriber->create_datareader(
-        subscriber_->topic_,
-        subscriber_->qos_,
-        &subscriber_->m_listener);
+                const types::TypeIdentifier* ident =
+                    types::TypeObjectFactory::get_instance()->get_type_identifier_trying_complete(name);
+                const types::TypeObject* obj =
+                    types::TypeObjectFactory::get_instance()->get_type_object(ident);
 
-    subscriber_->readers_[reader] = dyn_type;
-    types::DynamicData_ptr data = types::DynamicDataFactory::get_instance()->create_data(dyn_type);
-    subscriber_->datas_[reader] = data;
+                if (nullptr != ident)
+                {
+                    types::DynamicType_ptr dyn_type =
+                        types::TypeObjectFactory::get_instance()->build_dynamic_type(name, ident, obj);
+
+                    if (nullptr != dyn_type)
+                    {
+                        subscriber_->readers_[reader] = dyn_type;
+                        types::DynamicData_ptr data = types::DynamicDataFactory::get_instance()->create_data(dyn_type);
+                        subscriber_->datas_[reader] = data;
+                    }
+                    else
+                    {
+                        std::cout << "ERROR: DynamicType cannot be created for type: " << name << std::endl;
+                    }
+                }
+                else
+                {
+                    std::cout << "ERROR: TypeIdentifier cannot be retrieved for type: " << name << std::endl;
+                }
+
+            };
+
+    subscriber_->mp_participant->register_remote_type(
+        type_information,
+        type_name.to_string(),
+        callback);
 }
 
-void HelloWorldSubscriber::print_dynamic_data(
+void TypeLookupSubscriber::print_dynamic_data(
         types::DynamicData_ptr data,
         types::DynamicType_ptr type) const
 {
@@ -166,7 +195,7 @@ void HelloWorldSubscriber::print_dynamic_data(
     }
 }
 
-void HelloWorldSubscriber::print_member_data(
+void TypeLookupSubscriber::print_member_data(
         types::DynamicData_ptr data,
         types::DynamicTypeMember* type,
         const std::string& tab) const
@@ -288,13 +317,13 @@ void HelloWorldSubscriber::print_member_data(
     }
 }
 
-void HelloWorldSubscriber::run()
+void TypeLookupSubscriber::run()
 {
     std::cout << "Subscriber running. Please press enter to stop the Subscriber" << std::endl;
     std::cin.ignore();
 }
 
-void HelloWorldSubscriber::run(uint32_t number)
+void TypeLookupSubscriber::run(uint32_t number)
 {
     std::cout << "Subscriber running until "<< number << "samples have been received"<<std::endl;
     while(number > this->m_listener.n_samples)
