@@ -42,9 +42,9 @@ public:
 
     bool operator == (const safe_enum& s) const { return this->val == s.val; }
     bool operator != (const safe_enum& s) const { return this->val != s.val; }
-    bool operator < (const safe_enum& s) const { return this->val <  s.val; }
+    bool operator <  (const safe_enum& s) const { return this->val <  s.val; }
     bool operator <= (const safe_enum& s) const { return this->val <= s.val; }
-    bool operator > (const safe_enum& s) const { return this->val >  s.val; }
+    bool operator >  (const safe_enum& s) const { return this->val >  s.val; }
     bool operator >= (const safe_enum& s) const { return this->val >= s.val; }
 };
 
