@@ -23,20 +23,20 @@ namespace core {
 namespace xtypes {
 namespace detail {
 
-    template <typename T>
-    class TStructType; //[EPROSIMA CHECK]: changes StructType by TStructType with a template
+template <typename T>
+class TStructType; //[EPROSIMA CHECK]: changes StructType by TStructType with a template
 
-    template <typename T>
-    bool isFinal(const TStructType<T>& s) { return false; }
+template <typename T>
+bool is_final(const TStructType<T>& s) { return false; }
 
-    template <typename T>
-    bool isExtensible(const TStructType<T>& s) { return false; }
+template <typename T>
+bool is_extensible(const TStructType<T>& s) { return false; }
 
-    template <typename T>
-    bool isMutable(const TStructType<T>& s) { return false; }
+template <typename T>
+bool is_mutable(const TStructType<T>& s) { return false; }
 
-    template <typename T>
-    bool isNested(const TStructType<T>& s) { return false; }
+template <typename T>
+bool is_nested(const TStructType<T>& s) { return false; }
 
 } //namespace detail
 } //namespace xtypes

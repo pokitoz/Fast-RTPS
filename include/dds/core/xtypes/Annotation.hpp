@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-#ifndef OMG_DDS_CORE_XTYPES_TANNOTATION_HPP_
-#define OMG_DDS_CORE_XTYPES_TANNOTATION_HPP_
+#ifndef OMG_DDS_CORE_XTYPES_ANNOTATION_HPP_
+#define OMG_DDS_CORE_XTYPES_ANNOTATION_HPP_
 
-#include <dds/core/Reference.hpp>
+#include <dds/core/xtypes/detail/Annotation.hpp>
 
 namespace dds {
 namespace core {
@@ -53,37 +53,6 @@ struct ExtensibilityKind_def
     };
 };
 typedef dds::core::SafeEnum<ExtensibilityKind_def> ExtensibilityKind;
-
-
-template <typename DELEGATE>
-class TAnnotation;
-
-template <typename DELEGATE>
-class TIdAnnotation;
-
-template <typename DELEGATE>
-class TKeyAnnotation;
-
-template <typename DELEGATE>
-class TSharedAnnotation;
-
-template <typename DELEGATE>
-class TNestedAnnotation;
-
-template <typename DELEGATE>
-class TExtensibilityAnnotation;
-
-template <typename DELEGATE>
-class TMustUnderstandAnnotation;
-
-template <typename DELEGATE>
-class TVerbatimAnnotation;
-
-template <typename DELEGATE>
-class TBitsetAnnotation;
-
-template <typename DELEGATE>
-class TBitBoundAnnotation;
 
 
 template <typename DELEGATE>
@@ -174,10 +143,37 @@ public:
     TBitBoundAnnotation(uint32_t bound);
 };
 
+typedef TAnnotation<detail::Annotation> Annotation;
+typedef TIdAnnotation<detail::IdAnnotation> IdAnnotation;
+typedef TKeyAnnotation<detail::KeyAnnotation> KeyAnnotation;
+typedef TSharedAnnotation<detail::SharedAnnotation> SharedAnnotation;
+typedef TNestedAnnotation<detail::NestedAnnotation> NestedAnnotation;
+typedef TExtensibilityAnnotation<detail::ExtensibilityAnnotation> ExtensibilityAnnotation;
+typedef TMustUnderstandAnnotation<detail::MustUnderstandAnnotation> MustUnderstandAnnotation;
+typedef TVerbatimAnnotation<detail::VerbatimAnnotation> VerbatimAnnotation;
+typedef TBitsetAnnotation<detail::BitsetAnnotation> BitsetAnnotation;
+typedef TBitBoundAnnotation<detail::BitBoundAnnotation> BitBoundAnnotation;
 
+namespace annotation
+{
+    // These functions can be used to get cached instances,
+    // to avoid the proliferation of small annotation objects.
+    IdAnnotation id(uint32_t);
+    KeyAnnotation key();
+    SharedAnnotation shared();
+    NestedAnnotation nested();
+    ExtensibilityAnnotation extensibility(ExtensibilityKind kind);
+    ExtensibilityAnnotation get_final();
+    ExtensibilityAnnotation extensible();
+    ExtensibilityAnnotation get_mutable();
+    MustUnderstandAnnotation must_understand();
+    VerbatimAnnotation verbatim(const std::string& text);
+    BitsetAnnotation bitset();
+    BitsetAnnotation bit_bound(uint32_t bound);
+
+} //namespace annotation
 } //namespace xtypes
 } //namespace core
 } //namespace dds
 
-
-#endif // OMG_DDS_CORE_XTYPES_TANNOTATION_HPP_
+#endif // OMG_DDS_CORE_XTYPES_ANNOTATION_HPP_

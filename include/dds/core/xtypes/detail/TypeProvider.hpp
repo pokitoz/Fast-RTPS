@@ -23,7 +23,7 @@ namespace core {
 namespace xtypes {
 namespace detail {
 
-    class TypeProvider { };
+class TypeProvider { };
 
 } //namespace detail
 } //namespace xtypes

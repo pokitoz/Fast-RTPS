@@ -23,7 +23,7 @@ namespace core {
 namespace xtypes {
 namespace detail {
 
-    class DynamicData { };
+class DynamicData { };
 
 } //namespace detail
 } //namespace xtypes

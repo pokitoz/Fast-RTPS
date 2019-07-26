@@ -23,12 +23,12 @@ namespace core {
 namespace xtypes {
 namespace detail {
 
-    class CollectionType { };
-    class MapType { };
-    class SequenceType { };
+class CollectionType { };
+class MapType { };
+class SequenceType { };
 
-    template <typename CHAR_T>
-    class StringType { };
+template <typename CHAR_T>
+class StringType { };
 
 } //namespace detail
 } //namespace xtypes

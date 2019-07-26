@@ -24,7 +24,7 @@ namespace dds {
 namespace core {
 namespace detail {
 
-    using ::std::array;
+using ::std::array;
 
 } //namespace detail
 } //namespace core

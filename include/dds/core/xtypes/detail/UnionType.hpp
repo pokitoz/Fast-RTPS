@@ -23,8 +23,8 @@ namespace core {
 namespace xtypes {
 namespace detail {
 
-    template <typename T>
-    class UnionType { };
+template <typename T>
+class UnionType { };
 
 } //namespace detail
 } //namespace xtypes

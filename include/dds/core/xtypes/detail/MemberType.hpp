@@ -23,7 +23,7 @@ namespace core {
 namespace xtypes {
 namespace detail {
 
-    class MemberType { };
+class MemberType { };
 
 } //namespace detail
 } //namespace xtypes

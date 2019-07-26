@@ -37,13 +37,34 @@ public:
     const std::string& name() const;
     TypeKind kind() const;
 
+    const std::vector<Annotation>& annotations() const;
+
     bool operator == (const TDynamicType& that) const;
     bool operator != (const TDynamicType& that) const { return !(*this == that); }
 
 protected:
-    TDynamicType(const std::string& name, TypeKind kind);
+    TDynamicType(
+            const std::string& name,
+            TypeKind kind);
+
+    TDynamicType(
+            const std::string& name,
+            TypeKind kind,
+            const Annotation& annotation);
+
+    TDynamicType(
+            const std::string& name,
+            TypeKind kind,
+            const std::vector<Annotation>& annotations);
+
+    template <typename AnnotationIter>
+    TDynamicType(
+            const std::string& name,
+            TypeKind kind,
+            const AnnotationIter& begin,
+            const AnnotationIter& end);
+
     TDynamicType(const TDynamicType& other) = default;
-    virtual ~TDynamicType() = default;
 };
 
 template <typename T>
