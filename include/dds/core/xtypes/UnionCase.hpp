@@ -14,44 +14,40 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- */
- 
-/*
- * TUnionCase.hpp
- *
- *  Created on: Oct 24, 2012
- *      Author: angelo
+ * limitations under the License.
  */
 
-#ifndef  OMG_DDS_CORE_XTYPES_UNION_CASE_HPP_
-#define  OMG_DDS_CORE_XTYPES_UNION_CASE_HPP_
+#ifndef OMG_DDS_CORE_XTYPES_UNION_CASE_HPP_
+#define OMG_DDS_CORE_XTYPES_UNION_CASE_HPP_
+
+#include <dds/core/xtypes/detail/UnionCase.hpp>
+#include <dds/core/xtypes/MemberType.hpp>
 
 #include <dds/core/Reference.hpp>
-#include <dds/core/xtypes/MemberType.hpp>
-#include <dds/core/xtypes/detail/UnionCase.hpp>
 
 namespace dds{
 namespace core{
 namespace xtypes{
 
 template <typename T, template <typename Q> class DELEGATE>
-class TUnionCase : public Reference< DELEGATE<T> >
+class TUnionCase : public Reference<DELEGATE<T>>
 {
 public:
-    // Nil case
     TUnionCase();
-    TUnionCase(T discriminator, const MemberType& member);
+    TUnionCase(
+            T discriminator,
+            const MemberType& member);
+
     T discriminator();
     const MemberType& member();
-    
 };
 
 template <typename T>
-struct UnionCase : public TUnionCase <T, detail::UnionCase> {} ;
+struct UnionCase : public TUnionCase <T, detail::UnionCase> {};
 
-}//namespace xtypes
-}//namespace core
-}//namespace dds
+} //namespace xtypes
+} //namespace core
+} //namespace dds
 
 
-#endif /* OMG_DDS_CORE_XTYPES_T_UNION_CASE_HPP_ */
+#endif // OMG_DDS_CORE_XTYPES_T_UNION_CASE_HPP_

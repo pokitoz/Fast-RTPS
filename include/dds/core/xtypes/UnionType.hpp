@@ -16,14 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 #ifndef OMG_DDS_CORE_XTYPES_T_UNION_TYPE_HPP_
 #define OMG_DDS_CORE_XTYPES_T_UNION_TYPE_HPP_
+
+#include <dds/core/xtypes/detail/UnionType.hpp>
 
 #include <dds/core/xtypes/DynamicType.hpp>
 #include <dds/core/xtypes/UnionCase.hpp>
 #include <dds/core/xtypes/PrimitiveTypes.hpp>
-#include <dds/core/xtypes/detail/UnionType.hpp>
+
 #include <vector>
 
 namespace dds{
@@ -40,31 +42,28 @@ public:
     TUnionForwardDeclaration(const std::string& name);
 };
 
-template <typename T, typename DELEGATE>
-class TUnionType  : public TDynamicType< DELEGATE >
+template <typename T, template <typename Q> class DELEGATE>
+class TUnionType : public TDynamicType<DELEGATE<T>>
 {
 public:
+    TUnionType(
+        const std::string& name,
+        const PrimitiveType<T>& discriminator_type,
+        const std::vector<UnionCase<T>>& cases);
 
     TUnionType(
         const std::string& name,
         const PrimitiveType<T>& discriminator_type,
-        const std::vector<UnionCase<T> >& cases);
-
-    TUnionType(
-        const std::string& name,
-        const PrimitiveType<T>& discriminator_type,
-        const std::vector<UnionCase<T> >& cases,
+        const std::vector<UnionCase<T>>& cases,
         const Annotation& annotation);
 
     TUnionType(
         const std::string& name,
         const PrimitiveType<T>& discriminator_type,
-        const std::vector<UnionCase<T> >& cases,
+        const std::vector<UnionCase<T>>& cases,
         const std::vector<Annotation>& annotations);
 
-public:
-
-    const std::vector<UnionCase<T> >& members() const;
+    const std::vector<UnionCase<T>>& members() const;
     const MemberType& member(uint32_t id) const;
     const MemberType& member(const std::string& name) const;
 
@@ -75,14 +74,14 @@ public:
 
     TUnionType add_annotation(const Annotation& annotation) const;
     TUnionType remove_annotation(const Annotation& annotation) const;
-
 };
 
-typedef TUnionType <TypeKind_def::Type, DynamicType> UnionType ;
+template<typename T>
+class UnionType : public TUnionType<T, detail::UnionType> {};
 
-}//namespace xtypes
-}//namespace core
-}//namespace dds
+} //namespace xtypes
+} //namespace core
+} //namespace dds
 
 
-#endif /* OMG_DDS_CORE_XTYPES_T_STRUCT_TYPE_HPP_ */
+#endif // OMG_DDS_CORE_XTYPES_T_STRUCT_TYPE_HPP_

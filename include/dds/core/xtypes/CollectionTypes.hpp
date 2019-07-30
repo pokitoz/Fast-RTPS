@@ -21,6 +21,7 @@
 #define OMG_DDS_CORE_XTYPES_COLLECTION_TYPES_HPP_
 
 #include <dds/core/xtypes/detail/CollectionTypes.hpp>
+#include <dds/core/xtypes/DynamicType.hpp>
 
 namespace dds{
 namespace core{
@@ -31,71 +32,64 @@ template <typename DELEGATE>
 class TCollectionType : public TDynamicType<DELEGATE>
 {
 public:
-    const uint32_t UNBOUNDED = 0xFFFFFFFF;
+    constexpr static uint32_t UNBOUNDED = 0xFFFFFFFF;
 
 protected:
     TCollectionType(const std::string& name, TypeKind kind);
+
 public:
     uint32_t bounds() const;
 };
 
 
-typedef TCollectionType<detail::CollectionType> CollectionType;
-
-
-
-
-template <typename DELEGATE>
+template <typename DELEGATE, typename DELEGATE_K, typename DELEGATE_V>
 class TMapType : public TCollectionType<DELEGATE>
 {
 public:
-    /**
-     * Create an unbounded Map with the given key/value type.
-     */
-    TMapType(const DynamicType& key_type, const DynamicType& value_type);
-    /**
-     * Create an bounded Map with the given key/value type.
-     */
-    TMapType(const DynamicType& key_type, const DynamicType& value_type, uint32_t bounds);
+    TMapType(
+            const TDynamicType<DELEGATE_K>& key_type,
+            const TDynamicType<DELEGATE_V>& value_type);
+
+    TMapType(
+            const TDynamicType<DELEGATE_K>& key_type,
+            const TDynamicType<DELEGATE_V>& value_type,
+            uint32_t bounds);
+
 public:
-    const DynamicType& key_type();
-    const DynamicType& value_type();
+    const TDynamicType<DELEGATE_K>& key_type();
+    const TDynamicType<DELEGATE_V>& value_type();
 };
 
-template <typename DELEGATE>
+
+template <typename DELEGATE, typename DELEGATE_T>
 class TSequenceType : public TCollectionType<DELEGATE>
 {
 public:
-    /**
-     * Create an unbounded sequence for the given type.
-     */
-    TSequenceType(const DynamicType& type);
+    TSequenceType(
+        const TDynamicType<DELEGATE_T>& type);
 
-    /**
-     * Create a bounded sequence for the given type.
-     */
-    TSequenceType(const DynamicType& type, uint32_t bounds);
+    TSequenceType(
+        const TDynamicType<DELEGATE_T>& type,
+        uint32_t bounds);
 public:
-    const DynamicType& key_type() const;
+    const TDynamicType<DELEGATE_T>& key_type() const;
 };
 
-template <typename CHAR_T, template <typename C> class DELEGATE>
 
-class TStringType : public TCollectionType<detail::CollectionType>
+template <typename DELEGATE>
+class TStringType : public TCollectionType<DELEGATE>
 {
 public:
     TStringType(uint32_t bounds);
 };
 
-typedef TMapType<detail::MapType> MapType;
-
-typedef TSequenceType<detail::SequenceType> SequenceType;
-
-template <typename CHAR_T, template <typename C> class DELEGATE = detail::StringType>
-class TStringType;
+typedef TCollectionType<detail::CollectionType> CollectionType;
+typedef TMapType<detail::MapType, detail::DynamicType, detail::DynamicType> TypeMap;
+typedef TSequenceType<detail::SequenceType, detail::DynamicType> SequenceType;
+typedef TStringType<detail::StringType> StringType;
 
 } //namespace xtypes
 } //namespace core
 } //namespace dds
 
-#endif /* OMG_DDS_CORE_XTYPES_COLLECTION_TYPES_HPP_ */
+#endif // OMG_DDS_CORE_XTYPES_COLLECTION_TYPES_HPP_

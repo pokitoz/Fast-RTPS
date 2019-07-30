@@ -25,7 +25,7 @@
 namespace dds {
 namespace core {
 
-    using dds::core::detail::array;
+using dds::core::detail::array;
 
 } //namespace core
 } //namespace dds
