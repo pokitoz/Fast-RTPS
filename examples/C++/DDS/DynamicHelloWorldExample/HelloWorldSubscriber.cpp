@@ -138,7 +138,7 @@ void HelloWorldSubscriber::SubListener::on_type_discovery(
         &subscriber_->m_listener);
 
     subscriber_->readers_[reader] = dyn_type;
-    types::DynamicData_ptr data = types::DynamicDataFactory::get_instance()->create_data(dyn_type);
+    types::DynamicData_ptr data(types::DynamicDataFactory::get_instance()->create_data(dyn_type));
     subscriber_->datas_[reader] = data;
 }
 
@@ -155,7 +155,7 @@ void HelloWorldSubscriber::print_dynamic_data(
             type->get_all_members(members);
             for (auto it : members)
             {
-                print_member_data(data, it.second);
+                print_member_data(data.get(), it.second);
             }
             break;
         }
@@ -167,7 +167,7 @@ void HelloWorldSubscriber::print_dynamic_data(
 }
 
 void HelloWorldSubscriber::print_member_data(
-        types::DynamicData_ptr data,
+        types::DynamicData* data,
         types::DynamicTypeMember* type,
         const std::string& tab) const
 {
