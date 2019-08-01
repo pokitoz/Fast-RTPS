@@ -52,7 +52,7 @@ public:
 template <typename T>
 TPrimitiveType<T, detail::DynamicType> primitive_type()
 {
-    static dds::core::xtypes::TPrimitiveType<T, detail::DynamicType> t;
+    static TPrimitiveType<T, detail::DynamicType> t;
     return t;
 }
 
