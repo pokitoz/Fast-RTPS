@@ -29,7 +29,7 @@ namespace dds{
 namespace core{
 namespace xtypes{
 
-template <typename T, template <typename Q> class DELEGATE>
+template <typename T, template <typename> class DELEGATE>
 class TUnionCase : public Reference<DELEGATE<T>>
 {
 public:

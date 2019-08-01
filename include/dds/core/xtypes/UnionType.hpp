@@ -42,7 +42,7 @@ public:
     TUnionForwardDeclaration(const std::string& name);
 };
 
-template <typename T, template <typename Q> class DELEGATE>
+template <typename T, template <typename> class DELEGATE>
 class TUnionType : public TDynamicType<DELEGATE<T>>
 {
 public:
