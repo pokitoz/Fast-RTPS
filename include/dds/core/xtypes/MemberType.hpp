@@ -33,7 +33,7 @@ namespace dds {
 namespace core {
 namespace xtypes {
 
-template <typename DELEGATE>
+template <typename DELEGATE, typename OTHER_DELEGATE>
 class TMemberType : public Reference<DELEGATE>
 {
     OMG_DDS_REF_TYPE_PROTECTED_DC(TMemberType, Reference, DELEGATE)
@@ -41,22 +41,22 @@ class TMemberType : public Reference<DELEGATE>
 public:
     TMemberType(
             const std::string& name,
-            const DynamicType& type);
+            const TDynamicType<OTHER_DELEGATE>& type);
 
     TMemberType(
             const std::string& name,
-            const DynamicType& type,
+            const TDynamicType<OTHER_DELEGATE>& type,
             const std::vector<Annotation>& annotations);
 
     template <typename AnnotationIter>
     TMemberType(
             const std::string& name,
-            const DynamicType& type,
+            const TDynamicType<OTHER_DELEGATE>& type,
             const AnnotationIter& begin,
             const AnnotationIter& end);
 
     const std::string& name() const;
-    const dds::core::xtypes::DynamicType& type() const;
+    const dds::core::xtypes::TDynamicType<OTHER_DELEGATE>& type() const;
 
     TMemberType add_annotation(const Annotation& annotation);
     TMemberType remove_annotation(const Annotation& annotation);
@@ -72,7 +72,7 @@ public:
     int32_t get_id() const;
 };
 
-typedef TMemberType<detail::MemberType> MemberType;
+typedef TMemberType<detail::MemberType, detail::DynamicType> MemberType;
 typedef MemberType Member;
 
 } //namespace xtypes
