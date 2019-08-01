@@ -26,7 +26,7 @@ namespace detail {
 class CollectionType : public DynamicType { };
 class MapType : public CollectionType { };
 class SequenceType : public CollectionType { };
-class StringType : CollectionType { };
+class StringType : public CollectionType { };
 
 } //namespace detail
 } //namespace xtypes
