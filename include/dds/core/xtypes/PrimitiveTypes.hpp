@@ -35,12 +35,13 @@ struct dynamic_type_traits
     static constexpr const char* const NAME = "no_type";
 };
 
-template <typename T>
-class PrimitiveType : public DynamicType
+template <typename T, typename DELEGATE>
+class TPrimitiveType : public TDynamicType<DELEGATE>
 {
 public:
-    PrimitiveType() : DynamicType(dynamic_type_traits<T>::TYPE_ID, dynamic_type_traits<T>::NAME) { }
+    TPrimitiveType() : TDynamicType<DELEGATE>(dynamic_type_traits<T>::TYPE_ID, dynamic_type_traits<T>::NAME) { }
 };
+
 
 /**
  * Primitive type constructor. This function can be used
@@ -49,9 +50,9 @@ public:
  * DynamicType int16Type = primitive_type<int16_t>();
  */
 template <typename T>
-PrimitiveType<T> primitive_type()
+TPrimitiveType<T, detail::DynamicType> primitive_type()
 {
-    static dds::core::xtypes::PrimitiveType<T> t;
+    static dds::core::xtypes::TPrimitiveType<T, detail::DynamicType> t;
     return t;
 }
 
