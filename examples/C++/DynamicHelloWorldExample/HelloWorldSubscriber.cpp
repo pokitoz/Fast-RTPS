@@ -38,7 +38,7 @@ using namespace eprosima::fastrtps::types;
 HelloWorldSubscriber::HelloWorldSubscriber()
     : mp_participant(nullptr)
     , mp_subscriber(nullptr)
-    , m_DynType(nullptr)
+    , m_DynType(DynamicType_ptr(nullptr))
 {
 }
 
